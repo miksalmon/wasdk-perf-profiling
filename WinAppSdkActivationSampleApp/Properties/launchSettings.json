@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WinAppSdkActivationSampleApp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WinAppSdkActivationSampleApp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
