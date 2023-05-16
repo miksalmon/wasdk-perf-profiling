@@ -25,10 +25,14 @@ function RunXperfAndApp
     # Start xperf with the given command and append the index to the testsession and testsession name
     xperf -start "testsession$index" -f ".\Logs\etl\testsession$index.etl" -on 2e0582f3-d1b6-516a-9de3-9fd79ef952f8
     # Launch the app with the given name
+    # UWP: 66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt
+    # WASDK: 22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr
     Start-Process shell:AppsFolder\22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr!App
     # Wait for 1 seconds
     Start-Sleep -Seconds 1
     # Kill process
+    # UWP: UwpActivationSampleApp
+    # WASDK: WinAppSdkActivationSampleApp
     $process = Get-Process WinAppSdkActivationSampleApp
     Stop-Process -Id $process.Id
     # Stop xperf with the given command and append the index to the testsession
