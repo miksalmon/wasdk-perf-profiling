@@ -51,14 +51,66 @@ function ParsePerfs
             $_.Data | ForEach-Object {
                 $isGood = $isGood -or $_.Name -eq "timeElapsed"
             }
-            Write-Host $isGood
             return $isGood
         }
 
-        Write-Host $eventData
+        $eventData | ForEach-Object {
+            $timeElapsedData = $_.Data | Where-Object { $_.Name -eq "timeElapsed" }
+            $eventNameData = $_.Data | Where-Object { $_.Name -eq "eventName" }
+
+            if ($perfs.ContainsKey($eventNameData.InnerText))
+            {
+                $perfs[$eventNameData.InnerText] += [double]$timeElapsedData.InnerText
+            }
+            else
+            {
+                $perfs[$eventNameData.InnerText] = [System.Collections.ArrayList]::new()
+                $perfs[$eventNameData.InnerText] += [double]$timeElapsedData.InnerText
+            }
+        }
     }
-    
+
+    Write-Host ($perfs | Format-Table | Out-String)
+
+    # Iterate through the values of the dictionary
+    foreach ($pair in $perfs.GetEnumerator()) {
+        $median = Get-Median -InputArray $pair.Value
+        $average = ($pair.Value | Measure-Object -Average).Average
+        Write-Host ("{0} Median = {1}ms" -f $pair.Key, $median)
+        Write-Host ("{0} Average = {1}ms" -f $pair.Key, $average)
+    }
 } 
+
+# Define a function named Get-Median
+function Get-Median {
+    # Define a parameter for the input array
+    param (
+        [Parameter(Mandatory=$true)]
+        [System.Collections.ArrayList]$InputArray
+    )
+
+    # Sort the array in ascending order
+    $sorted = $InputArray | Sort-Object
+
+    # Get the length of the array
+    $length = $sorted.Length
+
+    # Check if the length is odd or even
+    if ($length % 2 -eq 0) {
+        # Get the average of the two middle elements
+        $index1 = $length / 2 - 1
+        $index2 = $index1 + 1
+        $median = ($sorted[$index1] + $sorted[$index2]) / 2
+    }
+    else {
+        # Get the middle element
+        $index = ($length - 1) / 2
+        $median = $sorted[$index]
+    }
+
+    # Return the median value
+    return $median
+}
 
 SetupFolders
 
