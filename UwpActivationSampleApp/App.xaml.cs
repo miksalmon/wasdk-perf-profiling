@@ -11,7 +11,7 @@ namespace UwpActivationSampleApp
     {
         public App()
         {
-            Logger.Instance.Log(nameof(App));
+            _ = Logger.Instance;
             InitializeComponent();
             Suspending += OnSuspending;
         }

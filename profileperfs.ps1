@@ -1,6 +1,6 @@
 param 
 (
-    [int]$c = 20
+    [int]$iterCount = 1
 )
 
 function SetupFolders
@@ -9,46 +9,47 @@ function SetupFolders
         if ((Test-Path -Path ".\Logs"))
         {
             # Delete all files in the logs folder
-            Remove-Item -Path ".\Logs\" -Force -Recurse
+            Remove-Item -Path ".\Logs\" -Force -Recurse | Out-Null
         }
-        New-Item -ItemType Directory -Path ".\Logs"
-        New-Item -ItemType Directory -Path ".\Logs\etl"
-        New-Item -ItemType Directory -Path ".\Logs\dump"
-        New-Item -ItemType Directory -Path ".\Logs\summary"
+        New-Item -ItemType Directory -Path ".\Logs" | Out-Null
+        New-Item -ItemType Directory -Path ".\Logs\etl" | Out-Null
+        New-Item -ItemType Directory -Path ".\Logs\dump" | Out-Null
+        New-Item -ItemType Directory -Path ".\Logs\summary" | Out-Null
 }
 
 # Define a function to run xperf and launch the app
-function RunXperfAndApp 
+function RunXperfAndApp($appId, $appName, $iterCount)
 {
-    # Get the current loop index as a string
-    $index = $i.ToString()
-    # Start xperf with the given command and append the index to the testsession and testsession name
-    xperf -start "testsession$index" -f ".\Logs\etl\testsession$index.etl" -on 2e0582f3-d1b6-516a-9de3-9fd79ef952f8
-    # Launch the app with the given name
-    # UWP: 66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt
-    # WASDK: 22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr
-    Start-Process shell:AppsFolder\22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr!App
-    # Wait for 1 seconds
-    Start-Sleep -Seconds 1
-    # Kill process
-    # UWP: UwpActivationSampleApp
-    # WASDK: WinAppSdkActivationSampleApp
-    $process = Get-Process WinAppSdkActivationSampleApp
-    Stop-Process -Id $process.Id
-    # Stop xperf with the given command and append the index to the testsession
-    xperf -stop "testsession$index"
-    # Run tracerpt with the given command and append the index to the testsession name
-    tracerpt ".\Logs\etl\testsession$index.etl" -o ".\Logs\dump\testsessiondump$index.xml" -summary ".\Logs\summary\testsessionsummary$index.txt"
+    for ($i = 1; $i -le $iterCount; $i++) 
+    {
+        # Start xperf with the given command and append the index to the testsession and testsession name
+        xperf -start "testsession${i}" -f ".\Logs\etl\${appName}_testsession${i}.etl" -on 2e0582f3-d1b6-516a-9de3-9fd79ef952f8 | Out-Null
+        # Launch the app with the given name
+        # UWP: 66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt
+        # WASDK: 22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr
+        Start-Process shell:AppsFolder\$appId!App | Out-Null
+        # Wait for 1 seconds
+        Start-Sleep -Seconds 1 | Out-Null
+        # Kill process
+        # UWP: UwpActivationSampleApp
+        # WASDK: WinAppSdkActivationSampleApp
+        $process = Get-Process $appName
+        Stop-Process -Id $process.Id | Out-Null
+        # Stop xperf with the given command and append the index to the testsession
+        xperf -stop "testsession${i}" | Out-Null
+        # Run tracerpt with the given command and append the index to the testsession name
+        tracerpt ".\Logs\etl\${appName}_testsession${i}.etl" -o ".\Logs\dump\${appName}_testsessiondump${i}.xml" -summary ".\Logs\summary\${appName}_testsessionsummary${i}.txt" | Out-Null
+    }
+
 } 
 
-function ParsePerfs 
+function ParsePerfs ($appName, $iterCount)
 {
     $perfs = [hashtable]::new()
 
-    for ($i = 1; $i -le $c; $i++) 
+    for ($i = 1; $i -le $iterCount; $i++) 
     {
-        $index = $i.ToString()
-        [xml]$xml = Get-Content ".\Logs\dump\testsessiondump$index.xml"
+        [xml]$xml = Get-Content ".\Logs\dump\${appName}_testsessiondump${i}.xml"
         
         $eventData = $xml.Events.Event.EventData | Where-Object {
             $isGood = $false
@@ -74,15 +75,25 @@ function ParsePerfs
         }
     }
 
-    Write-Host ($perfs | Format-Table | Out-String)
-
+    $medians = [hashtable]::new()
+    $averages = [hashtable]::new()
+    
     # Iterate through the values of the dictionary
     foreach ($pair in $perfs.GetEnumerator()) {
         $median = Get-Median -InputArray $pair.Value
         $average = ($pair.Value | Measure-Object -Average).Average
-        Write-Host ("{0} Median = {1}ms" -f $pair.Key, $median)
-        Write-Host ("{0} Average = {1}ms" -f $pair.Key, $average)
+        $medians[$pair.Key] = $median
+        $averages[$pair.Key] = $average
     }
+
+    $sortedMedians = $medians.GetEnumerator() | Sort-Object -Property Value
+    $sortedAverages = $averages.GetEnumerator() | Sort-Object -Property Value
+
+    Write-Host "~~~ ${appName} ~~~"
+    Write-Host "~~~ Medians ~~~"
+    Write-Host ($sortedMedians | Format-Table | Out-String)
+    Write-Host "~~~ Averages ~~~"
+    Write-Host ($sortedAverages | Format-Table | Out-String)
 } 
 
 # Define a function named Get-Median
@@ -118,11 +129,7 @@ function Get-Median {
 
 SetupFolders
 
-# Loop 20 times and call the function
-for ($i = 1; $i -le $c; $i++) 
-{
-    RunXperfAndApp
-}
-
-ParsePerfs
-
+RunXperfAndApp "66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt" "UwpActivationSampleApp" $iterCount
+ParsePerfs "UwpActivationSampleApp" $iterCount
+RunXperfAndApp "22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr" "WinAppSdkActivationSampleApp" $iterCount
+ParsePerfs "WinAppSdkActivationSampleApp" $iterCount
