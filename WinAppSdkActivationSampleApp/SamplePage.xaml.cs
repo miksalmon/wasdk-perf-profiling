@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WinAppSdkActivationSampleApp;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -29,7 +30,7 @@ namespace WinAppSdkActivationSampleApp
         public SamplePage()
         {
             Logger.Instance.Log(nameof(SamplePage));
-            this.InitializeComponent();
+            InitializeComponent();
             Loaded += SamplePage_Loaded;
         }
 
