@@ -33,6 +33,7 @@
     <Application Id="App"
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
+        
       <uap:VisualElements
         DisplayName="WinAppSdkActivationSampleApp"
         Description="WinAppSdkActivationSampleApp"
@@ -42,6 +43,19 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
         <uap:SplashScreen uap5:Optional="true" Image="Assets\Blank_SplashWideTile.png" />
       </uap:VisualElements>
+
+        <Extensions>
+            <uap:Extension Category="windows.fileTypeAssociation">
+                <uap:FileTypeAssociation Name="imagetypes">
+                    <uap:SupportedFileTypes>
+                        <uap:FileType>.jpe</uap:FileType>
+                        <uap:FileType>.jpeg</uap:FileType>
+                        <uap:FileType>.jpg</uap:FileType>
+                        <uap:FileType>.png</uap:FileType>
+                    </uap:SupportedFileTypes>
+                </uap:FileTypeAssociation>
+            </uap:Extension>
+        </Extensions>
     </Application>
   </Applications>
 

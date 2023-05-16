@@ -1,11 +1,16 @@
 using Microsoft.UI.Xaml;
 
+#nullable enable
+
 namespace WinAppSdkActivationSampleApp;
 
 public sealed partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(object? activationArgs)
     {
-        this.InitializeComponent();
+        InitializeComponent();
+        ActivationArgs = activationArgs;
     }
+
+    public object? ActivationArgs { get; }
 }
