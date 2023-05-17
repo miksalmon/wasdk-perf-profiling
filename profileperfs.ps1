@@ -27,12 +27,14 @@ function RunXperfAndApp($appId, $appName, $iterCount)
         # Launch the app with the given name
         # UWP: 66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt
         # WASDK: 22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr
+        # C++ WASDK: c32740de-9273-4b90-92a7-20cbf6415978_1.0.0.0_x64__0dbdf1n3n58kt
         Start-Process shell:AppsFolder\$appId!App | Out-Null
         # Wait for 1 seconds
         Start-Sleep -Seconds 1 | Out-Null
         # Kill process
         # UWP: UwpActivationSampleApp
         # WASDK: WinAppSdkActivationSampleApp
+        # C++ WASDK: WinAppSdkActivationSampleAppCpp
         $process = Get-Process $appName
         Stop-Process -Id $process.Id | Out-Null
         # Stop xperf with the given command and append the index to the testsession
@@ -133,3 +135,5 @@ RunXperfAndApp "66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt" "UwpActivati
 ParsePerfs "UwpActivationSampleApp" $iterCount
 RunXperfAndApp "22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr" "WinAppSdkActivationSampleApp" $iterCount
 ParsePerfs "WinAppSdkActivationSampleApp" $iterCount
+RunXperfAndApp "c32740de-9273-4b90-92a7-20cbf6415978_0dbdf1n3n58kt" "WinAppSdkActivationSampleAppCpp" $iterCount
+ParsePerfs "WinAppSdkActivationSampleAppCpp" $iterCount
