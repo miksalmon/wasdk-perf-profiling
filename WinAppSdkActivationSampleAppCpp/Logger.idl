@@ -1,0 +1,11 @@
+namespace WinAppSdkActivationSampleAppCpp
+{
+    [bindable]
+    [default_interface]
+    runtimeclass Logger 
+    {
+        Logger();
+        void Log(String eventName);
+        static Logger Singleton();
+    }
+}
