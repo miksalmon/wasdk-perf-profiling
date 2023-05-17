@@ -38,5 +38,10 @@ namespace WinAppSdkActivationSampleApp
         {
             Logger.Instance.Log(nameof(SamplePage_Loaded));
         }
+
+        private void Image_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            Logger.Instance.Log(nameof(Image_ImageOpened));
+        }
     }
 }

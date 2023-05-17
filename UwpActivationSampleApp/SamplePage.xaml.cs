@@ -15,5 +15,10 @@ namespace UwpActivationSampleApp
         {
             Logger.Instance.Log(nameof(SamplePage_Loaded));
         }
+
+        private void Image_ImageOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Logger.Instance.Log(nameof(Image_ImageOpened));
+        }
     }
 }

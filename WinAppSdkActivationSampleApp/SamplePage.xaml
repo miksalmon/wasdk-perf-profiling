@@ -11,6 +11,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <Grid>
-        <TextBlock>Hello WASDK!</TextBlock>
+        <Image ImageOpened="Image_ImageOpened" Source="ms-appx:///Assets/unsplash-hires.jpg" />
     </Grid>
 </Page>
