@@ -1,0 +1,8 @@
+namespace UwpActivationSampleAppCpp
+{
+    [default_interface]
+    runtimeclass SamplePage : Windows.UI.Xaml.Controls.Page
+    {
+        SamplePage();
+    }
+}
