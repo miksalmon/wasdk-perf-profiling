@@ -2,7 +2,7 @@
   "profiles": {
     "WinAppSdkActivationSampleApp (Package)": {
       "commandName": "MsixPackage",
-      "doNotLaunchApp": true
+      "doNotLaunchApp": false
     },
     "WinAppSdkActivationSampleApp (Unpackaged)": {
       "commandName": "Project"

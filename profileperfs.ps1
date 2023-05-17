@@ -25,9 +25,6 @@ function RunXperfAndApp($appId, $appName, $iterCount)
         # Start xperf with the given command and append the index to the testsession and testsession name
         xperf -start "testsession${i}" -f ".\Logs\etl\${appName}_testsession${i}.etl" -on 2e0582f3-d1b6-516a-9de3-9fd79ef952f8 | Out-Null
         # Launch the app with the given name
-        # UWP: 66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt
-        # WASDK: 22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr
-        # C++ WASDK: c32740de-9273-4b90-92a7-20cbf6415978_1.0.0.0_x64__0dbdf1n3n58kt
         Start-Process shell:AppsFolder\$appId!App | Out-Null
         # Wait for 1 seconds
         Start-Sleep -Seconds 1 | Out-Null
@@ -129,11 +126,22 @@ function Get-Median {
     return $median
 }
 
+$AppName_UWP = "UwpActivationSampleApp"
+$AppId_UWP = "66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt"
+$AppName_CppUWP = "UwpActivationSampleAppCpp"
+$AppId_CppUWP = "1e47014e-e6f4-44cf-9be4-f77d5b4d886a_0dbdf1n3n58kt"
+$AppName_WASDK = "WinAppSdkActivationSampleApp"
+$AppId_WASDK = "22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr"
+$AppName_CppWASDK = "WinAppSdkActivationSampleAppCpp"
+$AppId_CppWASDK = "c32740de-9273-4b90-92a7-20cbf6415978_0dbdf1n3n58kt"
+
 SetupFolders
 
-RunXperfAndApp "66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt" "UwpActivationSampleApp" $iterCount
-ParsePerfs "UwpActivationSampleApp" $iterCount
-RunXperfAndApp "22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr" "WinAppSdkActivationSampleApp" $iterCount
-ParsePerfs "WinAppSdkActivationSampleApp" $iterCount
-RunXperfAndApp "c32740de-9273-4b90-92a7-20cbf6415978_0dbdf1n3n58kt" "WinAppSdkActivationSampleAppCpp" $iterCount
-ParsePerfs "WinAppSdkActivationSampleAppCpp" $iterCount
+RunXperfAndApp $AppId_UWP $AppName_UWP $iterCount
+ParsePerfs $AppName_UWP $iterCount
+RunXperfAndApp $AppId_CppUWP $AppName_CppUWP $iterCount
+ParsePerfs $AppName_CppUWP $iterCount
+RunXperfAndApp $AppId_WASDK $AppName_WASDK $iterCount
+ParsePerfs $AppName_WASDK $iterCount
+RunXperfAndApp $AppId_CppWASDK $AppName_CppWASDK $iterCount
+ParsePerfs $AppName_CppWASDK $iterCount
