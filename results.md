@@ -5,6 +5,13 @@
 |SamplePage|122.11 ms  | 122 ms | 72.88 ms | 47.1 ms
 |SamplePage_Loaded|132.16 ms | 133.97 ms | 117.67 ms | 127.28 ms
 
+# Desktop (intel i5-6600k, 32gb ram) - 50 iterations
+||UWP C# | UWP C++ | WASDK C# | WASDK C++
+|---|---|---|---|----
+|OnLaunched|120.12 ms | 173.33 ms | 76.36 ms | 36.43 ms
+|SamplePage|169.60 ms  | 174.01 ms | 139.91 ms | 129.25 ms
+|SamplePage_Loaded|187.22 ms | 191.67 ms | 189.68 ms | 196.35 ms
+
 # Laptop (intel i7-1185G7, 16gb ram, plugged) - 50 iterations
 ||UWP C# | UWP C++ | WASDK C# | WASDK C++
 |---|---|---|---|----
