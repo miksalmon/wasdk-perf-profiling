@@ -1,0 +1,8 @@
+namespace AppCppWASDK
+{
+    [default_interface]
+    runtimeclass SamplePage : Microsoft.UI.Xaml.Controls.Page
+    {
+        SamplePage();
+    }
+}

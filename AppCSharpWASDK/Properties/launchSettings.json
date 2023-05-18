@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "AppCSharpWASDK (Package)": {
+      "commandName": "MsixPackage",
+      "doNotLaunchApp": false
+    },
+    "AppCSharpWASDK (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

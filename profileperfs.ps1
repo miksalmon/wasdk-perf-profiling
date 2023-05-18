@@ -29,9 +29,9 @@ function RunXperfAndApp($appId, $appName, $iterCount)
         # Wait for 1 seconds
         Start-Sleep -Seconds 1 | Out-Null
         # Kill process
-        # UWP: UwpActivationSampleApp
-        # WASDK: WinAppSdkActivationSampleApp
-        # C++ WASDK: WinAppSdkActivationSampleAppCpp
+        # UWP: AppCSharpUWP
+        # WASDK: AppCSharpWASDK
+        # C++ WASDK: AppCppWASDK
         $process = Get-Process $appName
         Stop-Process -Id $process.Id | Out-Null
         # Stop xperf with the given command and append the index to the testsession
@@ -126,13 +126,13 @@ function Get-Median {
     return $median
 }
 
-$AppName_UWP = "UwpActivationSampleApp"
+$AppName_UWP = "AppCSharpUWP"
 $AppId_UWP = "66e9f9be-e9dd-4ddf-a3aa-40c2808eefcb_0dbdf1n3n58kt"
-$AppName_CppUWP = "UwpActivationSampleAppCpp"
+$AppName_CppUWP = "AppCppUWP"
 $AppId_CppUWP = "1e47014e-e6f4-44cf-9be4-f77d5b4d886a_0dbdf1n3n58kt"
-$AppName_WASDK = "WinAppSdkActivationSampleApp"
+$AppName_WASDK = "AppCSharpWASDK"
 $AppId_WASDK = "22a1fef7-227f-418a-a664-97b10161a21e_1b3t2bcbty5kr"
-$AppName_CppWASDK = "WinAppSdkActivationSampleAppCpp"
+$AppName_CppWASDK = "AppCppWASDK"
 $AppId_CppWASDK = "c32740de-9273-4b90-92a7-20cbf6415978_0dbdf1n3n58kt"
 
 SetupFolders

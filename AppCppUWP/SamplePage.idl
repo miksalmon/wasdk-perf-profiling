@@ -1,0 +1,8 @@
+namespace AppCppUWP
+{
+    [default_interface]
+    runtimeclass SamplePage : Windows.UI.Xaml.Controls.Page
+    {
+        SamplePage();
+    }
+}
